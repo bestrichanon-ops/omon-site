@@ -1,8 +1,10 @@
 
 
-<script type="application/ld+json">
-  {{ section.settings.product | structured_data }}
-</script>
+{%- if section.settings.product != blank and request.page_type != 'product' -%}
+  <script type="application/ld+json">
+    {{ section.settings.product | structured_data }}
+  </script>
+{%- endif -%}
 
 {%- liquid
   assign product = section.settings.product

@@ -45,15 +45,22 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
+        {%- assign first_faq = true -%}
         {%- for item in faq_items -%}
-          {
-            "@type": "Question",
-            "name": {{ item.question | strip | json }},
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": {{ item.answer | strip | json }}
+          {%- assign question_text = item.question | strip -%}
+          {%- assign answer_text = item.answer | strip_html | strip -%}
+          {%- if question_text != blank and answer_text != blank -%}
+            {%- unless first_faq -%},{%- endunless -%}
+            {
+              "@type": "Question",
+              "name": {{ question_text | json }},
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": {{ answer_text | json }}
+              }
             }
-          }{%- unless forloop.last -%},{%- endunless -%}
+            {%- assign first_faq = false -%}
+          {%- endif -%}
         {%- endfor -%}
       ]
     }
